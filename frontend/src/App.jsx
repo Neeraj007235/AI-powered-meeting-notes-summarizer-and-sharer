@@ -11,6 +11,7 @@ const API_BASE =
 
 const App = () => {
   const [summary, setSummary] = useState('');
+  const [summaryId, setSummaryId] = useState(null);
   const [formResetTrigger, setFormResetTrigger] = useState(0); // Trigger form reset
 
   const handleGenerate = async (text, prompt) => {
@@ -20,9 +21,24 @@ const App = () => {
         customPrompt: prompt,
       });
       setSummary(response.data.summary);
+      setSummaryId(response.data._id);
       toast.success('Summary generated successfully!');
     } catch (err) {
       toast.error('Error generating summary');
+      console.error(err);
+    }
+  };
+
+  const handleSave = async () => {
+    if (!summaryId) return toast.error('No summary to save');
+
+    try {
+      await axios.put(`${API_BASE}/summaries/${summaryId}`, {
+        summary,
+      });
+      toast.success('Summary saved successfully!');
+    } catch (err) {
+      toast.error('Failed to save summary');
       console.error(err);
     }
   };
@@ -37,6 +53,7 @@ const App = () => {
 
       // Clear everything after sending
       setSummary('');
+      setSummaryId(null);
       setFormResetTrigger((prev) => prev + 1); // Trigger form reset
     } catch (err) {
       toast.error('Failed to send email');
@@ -60,7 +77,7 @@ const App = () => {
         {/* Summary & Email section */}
         {summary && (
           <div className="mt-8 space-y-6">
-            <SummaryEditor summary={summary} onChange={setSummary} />
+            <SummaryEditor summary={summary} onChange={setSummary} onSave={handleSave} />
             <EmailSender summary={summary} onSend={handleSendEmail} />
           </div>
         )}
