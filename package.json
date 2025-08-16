@@ -1,0 +1,13 @@
+{
+  "name": "ai-meeting-summary",
+  "version": "1.0.0",
+  "description": "This project allows users to upload meeting transcripts, generate structured AI summaries using custom prompts, edit the summaries, and email them to recipients — all powered by Groq’s LLM.",
+  "main": "index.js",
+  "scripts": {
+    "build":"npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
+    "start": "npm run start --prefix backend"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
